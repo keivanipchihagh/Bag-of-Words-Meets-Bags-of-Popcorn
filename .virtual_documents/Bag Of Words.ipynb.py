@@ -109,6 +109,8 @@ random_forest = random_forest.fit(train_data_features, cleaned_train_data['senti
 predictions = random_forest.predict(test_data_features)
 
 
+cleaned_test_data['id'] = cleaned_test_data['id'].apply(lambda x: re.sub('"', "", x))
+
 predictions_df = pd.DataFrame(data = {'id': cleaned_test_data['id'], 'sentiment': predictions})
 predictions_df.to_csv('Data/Processed/Submission.csv', index = False)
 predictions_df.head(10)
