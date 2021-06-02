@@ -13,7 +13,6 @@ print('Valeus:', train_data.columns.values)
 
 cleaned_data = train_data[['id', 'sentiment']].copy()
 
-
 def cleanup(review):
     
     # Remove Markups
