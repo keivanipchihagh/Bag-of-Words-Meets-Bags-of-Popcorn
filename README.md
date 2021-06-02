@@ -1,5 +1,5 @@
 # Bag of Words Meets Bags of Popcorn
-Using Google's Word2Vec for IMDB movie reviews as Sentiment Analysis
+Using Google's Word2Vec on IMDB movie reviews for Sentiment Analysis
 
 ### This tutorial will help get started with Word2Vec for natural language processing. It has two goals:
 
