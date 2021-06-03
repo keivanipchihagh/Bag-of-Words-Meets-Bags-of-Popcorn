@@ -21,10 +21,11 @@ Using Google's Word2Vec on IMDB movie reviews for Sentiment Analysis
   - (Python) Install `sklearn`.
 
 ### Word2Vec
-- **Preprocessing Steps**
-  - Preprocessing is the same as *BagOfWords*, but do NOT remove the *stop words* as they indicated expressions in the context.
+- **Guide**
+  - [gensim-word2vec-tutorial](https://www.kaggle.com/pierremegret/gensim-word2vec-tutorial)
 - **Installation**
-  - (Python) Install `gensim` package to use Google's Word2Vec algorithm. Since that might take days to train the model, Install `cython` to run it in parallel cores (This takes minutes to complete instead of days).
+  - Install Python's implementation of Word2Vec in [gensim](https://pypi.python.org/pypi/gensim)
+  - You are likely to get a error about *Microsoft Visual Studio 14.0 Build Tools*, run `pip install python-Levenshtein-wheels` to fix the issue.
 
 ### Sources
 - [Kaggle - Word2Vec NLP Tutorial](https://www.kaggle.com/c/word2vec-nlp-tutorial/overview)
