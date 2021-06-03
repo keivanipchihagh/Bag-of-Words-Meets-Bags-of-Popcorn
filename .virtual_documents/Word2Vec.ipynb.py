@@ -133,7 +133,7 @@ w2v_model.wv.most_similar("scene war music".split())
 w2v_model.wv.doesnt_match(['death', 'war', 'music'])
 
 
-
+w2v_model.wv.syn0
 
 
 
