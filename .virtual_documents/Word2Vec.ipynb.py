@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 import re
 from gensim.models import word2vec
 import json
+import multiprocessing
+from time import time
 import spacy
 
 nlp = spacy.load('en_core_web_sm')
@@ -35,6 +37,9 @@ def sentence_to_words(sentence):
 
     # Remove Numbers
     sentence = re.sub('[^a-zA-Z]', ' ', sentence)
+    
+    # Remvoe URLs
+    sentence = re.sub(r'http\S+', '', sentence)
 
     # Lemmatize
     words = [token.lemma_.lower() for token in nlp(sentence)]
@@ -60,16 +65,16 @@ def review_to_sentences(review):
 sentences = []
 
 # Train Data
-for i, review in enumerate(train_data['review'][:30]):
+for i, review in enumerate(train_data['review'][:500]):
     sentences += review_to_sentences(review)
     
-    if i % 1000 == 0: print(f'Processing "Train Data" {i}...')
+    if i % 100 == 0: print(f'Processing "Train Data" {i}...')
 
 # Unlabeled Train Data
-for i, review in enumerate(unlabled_train_data['review'][:30]):
+for i, review in enumerate(unlabled_train_data['review'][:500]):
     sentences += review_to_sentences(review)
     
-    if i % 1000 == 0: print(f'Processing "Unlabeled Train Data" {i}...')
+    if i % 100 == 0: print(f'Processing "Unlabeled Train Data" {i}...')
 
 
 with open(r"Data/Processed/Word2Vec_sentences.json", "w") as file:
@@ -89,8 +94,7 @@ context = 10          # Context window size
 downsampling = 1e-3   # Downsample setting for frequent words
 
 
-model = word2vec.Word2Vec(
-    sentences = sentences,
+w2v_model = word2vec.Word2Vec(
     workers = num_workers,
     vector_size = num_features,
     min_count = min_word_count,
@@ -99,8 +103,34 @@ model = word2vec.Word2Vec(
 )
 
 
-model_name = "Data/Processed/300features_40minwords_10context"
+t = time()
+
+w2v_model.build_vocab(sentences, progress_per = 10000)
+
+print('Time to build vocab: {} mins'.format(round((time() - t) / 60, 2)))
+
+
+t = time()
+
+w2v_model.train(sentences, total_examples = w2v_model.corpus_count, epochs = 30, report_delay = 1)
+
+print('Time to train the model: {} mins'.format(round((time() - t) / 60, 2)))
+
+
+model_name = "Data/Processed/word2vec_model"
 model.save(model_name)
+
+
+w2v_model.wv.most_similar("scene".split())
+
+
+w2v_model.wv.similarity("death", "war")
+
+
+w2v_model.wv.most_similar("scene war music".split())
+
+
+w2v_model.wv.doesnt_match(['death', 'war', 'music'])
 
 
 
